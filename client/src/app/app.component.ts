@@ -1,26 +1,31 @@
 import { NgFor } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavComponent } from "./nav/nav.component";
+import { AccountService } from './_services/account.service';
+import { HomeComponent } from "./home/home.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgFor, NavComponent], //ako koristime directives kao NgFor gi stavame ovde
+  imports: [RouterOutlet, NgFor, NavComponent, HomeComponent], //ako koristime directives kao NgFor gi stavame ovde
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
-  http = inject(HttpClient);
+export class AppComponent implements OnInit {
+  private accountService = inject(AccountService);
   title = 'We can change this'; //menjash samo na edno mesto a u htmlot stavash so {{}} vars
-  users:any;
+
 
   ngOnInit(): void {
-    this.http.get('https://localhost:5001/api/users').subscribe({
-      next: response => this.users = response,
-      error: error => console.log(error),
-      complete:() => console.log('Request is complete')
-    })
-  } //an http request almost always completes and there is no need for us to unsubscribe
+    this.setCurrentUser();
+  }
+
+  setCurrentUser() {
+    const userString = localStorage.getItem('user');
+    if(!userString) return;
+
+    const user = JSON.parse(userString);
+    this.accountService.currentUser.set(user);
+  }
 }
