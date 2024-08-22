@@ -18,7 +18,7 @@ export const routes: Routes = [
         children: [
             { path: 'members', component: MemberListComponent }, 
             //za single route da mu staish guard moesh  canActivate: [authGuard] vnare vo routeot
-            { path: 'members/:id', component: MemberDetailComponent },
+            { path: 'members/:username', component: MemberDetailComponent },
             { path: 'lists', component: ListsComponent },
             { path: 'messages', component: MessagesComponent },
         ]

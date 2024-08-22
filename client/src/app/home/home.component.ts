@@ -9,14 +9,12 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit {
-  http = inject(HttpClient);
+export class HomeComponent { //implements OnInit ako ni treba taa func
   registerMode = false;
-  users: any;
 
-  ngOnInit(): void {
-    this.getUsers();
-  }
+  // ngOnInit(): void {
+  //   this.getUsers();
+  // }
 
   registerToggle()
   {
@@ -28,11 +26,11 @@ export class HomeComponent implements OnInit {
     this.registerMode = event;
   }
   
-  getUsers() {
-    this.http.get('https://localhost:5001/api/users').subscribe({
-      next: response => this.users = response,
-      error: error => console.log(error),
-      complete: () => console.log('Request is complete')
-    })//an http request almost always completes and there is no need for us to unsubscribe
-  }
+  // getUsers() {
+  //   this.http.get('https://localhost:5001/api/users').subscribe({
+  //     next: response => this.users = response,
+  //     error: error => console.log(error),
+  //     complete: () => console.log('Request is complete')
+  //   })//an http request almost always completes and there is no need for us to unsubscribe
+  // }
 }
