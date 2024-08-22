@@ -8,6 +8,7 @@ import { authGuard } from './_guards/auth.guard';
 import { TestErrorsComponent } from './errors/test-errors/test-errors.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -18,7 +19,8 @@ export const routes: Routes = [
         children: [
             { path: 'members', component: MemberListComponent }, 
             //za single route da mu staish guard moesh  canActivate: [authGuard] vnare vo routeot
-            { path: 'members/:username', component: MemberDetailComponent },
+            { path: 'members/edit', component: MemberEditComponent},
+            { path: 'members/:username', component: MemberDetailComponent},
             { path: 'lists', component: ListsComponent },
             { path: 'messages', component: MessagesComponent },
         ]
