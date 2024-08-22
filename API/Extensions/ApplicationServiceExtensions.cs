@@ -30,6 +30,9 @@ public static class ApplicationServiceExtensions
 
         //Scoped - once per client request
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); //ova vnatre mu kazhuva kade da gi bara
+        //posho automapper profileot ide od profiles ke znae deka tie mu se mapsot 
 
         return services;
     }
