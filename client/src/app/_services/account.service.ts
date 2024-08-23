@@ -16,32 +16,32 @@ export class AccountService {
   currentUser = signal<User | null>(null);
 
 
-  login(model: any) { 
+  login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
-      map(user=> {
-        if(user)
-        {
-          localStorage.setItem('user',JSON.stringify(user)); 
-          this.currentUser.set(user);
+      map(user => {
+        if (user) {
+          this.setCurrentUser(user);
         }
       }
-    ));
+      ));
   }
 
-  register(model: any) { 
+  register(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
-      map(user=> {
-        if(user)
-        {
-          localStorage.setItem('user',JSON.stringify(user)); 
-          this.currentUser.set(user);
+      map(user => {
+        if (user) {
+          this.setCurrentUser(user);
         }
         return user; //ova e samo za da mozham da go printam koa ke projde register func vo register comp
       }
-    ));
+      ));
   }
 
-  logout(){
+  setCurrentUser(user: User) {
+    localStorage.setItem('user', JSON.stringify(user));
+    this.currentUser.set(user);
+  }
+  logout() {
     localStorage.removeItem('user');
     this.currentUser.set(null);
   }
