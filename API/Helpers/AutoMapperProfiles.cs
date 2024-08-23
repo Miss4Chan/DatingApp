@@ -16,5 +16,6 @@ public class AutoMapperProfiles : Profile
                 .MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain)!.Url)); //ako nema main ili nema slika ke go stai null
         //Vidi go ova ubavo kako raboti 
         CreateMap<Photo, PhotoDto>();
+        CreateMap<MemberUpdateDto, AppUser>();
     }
 }
