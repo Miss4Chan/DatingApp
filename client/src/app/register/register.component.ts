@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { JsonPipe, NgIf } from '@angular/common';
 import { TextInputComponent } from "../_forms/text-input/text-input.component";
 import { DatePickerComponent } from "../_forms/date-picker/date-picker.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -15,8 +16,9 @@ import { DatePickerComponent } from "../_forms/date-picker/date-picker.component
 })
 export class RegisterComponent implements OnInit {
   private accountService = inject(AccountService);
-  private toastr = inject(ToastrService);
+  // private toastr = inject(ToastrService);
   private fb =inject(FormBuilder);
+  private router = inject(Router)
   // /@Input() usersFromHomeComponent: any; koga go imame vaka treba vo deklaracijata na component vo html
   //ako go staime required ke iame error na tagot deka mora da mu gi predademe ovie 
   //ova ni e parent to child communication zatoa shto gi iame u home userite i samo mu gi davame na deteto koa go praime
@@ -24,9 +26,10 @@ export class RegisterComponent implements OnInit {
 
   //@Output() cancelRegister = new EventEmitter();
   cancelRegister = output<boolean>();
-  model: any = {}
+  // model: any = {}
   registerForm: FormGroup = new FormGroup({});
   maxDate = new Date();
+  validationErrors:  string[] | undefined;
 
   ngOnInit(): void {
     this.initalizeForm();
@@ -58,18 +61,27 @@ export class RegisterComponent implements OnInit {
 
   register() {
     console.log(this.registerForm.value);
-    // console.log(this.model);
-    // this.accountService.register(this.model).subscribe({
-    //   next: response => {
-    //     console.log(response);
-    //     this.cancel(); //za da ja trgne ovaa komponenta
-    //   },
-    //   error: error => this.toastr.error(error.error)
-    // });
+
+    const dob = this.getDateOnly(this.registerForm.get('dateOfBirth')?.value);
+    this.registerForm.patchValue({dateOfBirth: dob});
+    this.accountService.register(this.registerForm.value).subscribe({
+      next: _ => this.router.navigateByUrl('/members'),
+      // next: response => {
+      //   console.log(response);
+      //   this.cancel(); //za da ja trgne ovaa komponenta
+      // },
+      error: error => this.validationErrors = error
+    });
   }
 
   cancel() {
     console.log('cancelled');
     this.cancelRegister.emit(false);
+  }
+
+  private getDateOnly(dob: string | undefined)
+  {
+    if(!dob) return;
+    return new Date(dob).toISOString().slice(0,10);
   }
 }

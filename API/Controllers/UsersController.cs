@@ -57,6 +57,9 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
             PublicId = result.PublicId
         };
 
+        //pred da ja staish vidi dali mu e prva, ako mu e prva po default staj ja da bide main
+        if(user.Photos.Count == 0) photo.IsMain=true;
+
         user.Photos.Add(photo);
 
         if (await userRepository.SaveAllAsync())
