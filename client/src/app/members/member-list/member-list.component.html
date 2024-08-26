@@ -1,7 +1,19 @@
 <div class="row">
-    @for (member of memberService.members(); track member.id) {
+    @for (member of memberService.paginatedResults()?.items; track member.id) {
     <div class="col-2">
         <app-member-card [member]="member"></app-member-card>
     </div>
     }
 </div>
+@if (memberService.paginatedResults()?.pagination) {
+<div class="d-flex justify-content-center">
+    <!-- ova so ! go stavame samo posho sme absolutno sigurni radi ifot gore deka ke iame pagination -->
+    <pagination [boundaryLinks]="true" [totalItems]="memberService.paginatedResults()?.pagination!.totalItems" 
+        [itemsPerPage]="memberService.paginatedResults()?.pagination!.itemsPerPage"
+        (pageChanged)="pageChanged($event)"
+        [maxSize]="10"
+        previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+
+    </pagination>
+</div>
+}
