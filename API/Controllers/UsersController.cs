@@ -2,6 +2,7 @@ using System.Security.Claims;
 using API.DTO;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -14,9 +15,10 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
 {
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+    public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
     {
-        var users = await userRepository.GetMembersAsync();
+        var users = await userRepository.GetMembersAsync(userParams);
+        Response.AddPaginationHeader(users);
         return Ok(users);
     }
 
@@ -58,7 +60,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
         };
 
         //pred da ja staish vidi dali mu e prva, ako mu e prva po default staj ja da bide main
-        if(user.Photos.Count == 0) photo.IsMain=true;
+        if (user.Photos.Count == 0) photo.IsMain = true;
 
         user.Photos.Add(photo);
 
@@ -93,19 +95,19 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
     public async Task<ActionResult> DeletePhoto(int photoId)
     {
         var user = await userRepository.GetUserByUsernameAsync(User.GetUsername());
-        if(user == null) return BadRequest("User not found");
-        var photo = user.Photos.FirstOrDefault(x=>x.Id == photoId);
-        if(photo == null || photo.IsMain) return BadRequest("This photo cannot be deleted");
+        if (user == null) return BadRequest("User not found");
+        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+        if (photo == null || photo.IsMain) return BadRequest("This photo cannot be deleted");
 
-        if(photo.PublicId != null)
+        if (photo.PublicId != null)
         {
             var result = await photoService.DeletePhotoAsync(photo.PublicId);
-            if(result.Error != null) return BadRequest(result.Error.Message);
+            if (result.Error != null) return BadRequest(result.Error.Message);
         }
 
         user.Photos.Remove(photo);
 
-        if(await userRepository.SaveAllAsync()) return Ok();
+        if (await userRepository.SaveAllAsync()) return Ok();
 
         return BadRequest("Problem deleting photo");
     }
