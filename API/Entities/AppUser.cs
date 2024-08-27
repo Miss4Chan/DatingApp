@@ -25,4 +25,7 @@ public class AppUser
 
     public List<UserLike> LikedByUsers { get; set; } = []; //koj go likenal ovoj user
     public List<UserLike> LikedUsers { get; set; } = []; // koj/i ovoj user gi lajknal
+
+    public List<Message> MessagesSent { get; set; } = [];
+    public List<Message> MessagesReceived { get; set; } = [];
 }

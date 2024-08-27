@@ -32,6 +32,7 @@ public static class ApplicationServiceExtensions
         //Scoped - once per client request
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ILikesRepository, LikesRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
 
         services.AddScoped<LogUserActivity>();
 
