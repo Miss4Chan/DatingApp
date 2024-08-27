@@ -30,10 +30,14 @@ public static class ApplicationServiceExtensions
         //Transient se kreira sekoj pat koa se povika
 
         //Scoped - once per client request
-        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ILikesRepository, LikesRepository>();
+
         services.AddScoped<LogUserActivity>();
+
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IPhotoService, PhotoService>();
+
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); //ova vnatre mu kazhuva kade da gi bara
         //posho automapper profileot ide od profiles ke znae deka tie mu se mapsot 
 
