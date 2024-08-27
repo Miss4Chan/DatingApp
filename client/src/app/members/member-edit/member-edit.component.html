@@ -30,12 +30,13 @@
 
                 <div>
                     <strong>Last active:</strong>
-                    <p>{{member.lastActive}}</p>
+                    <p>{{member.lastActive | timeago}}</p>
                 </div>
 
                 <div>
                     <strong>Member since:</strong>
-                    <p>{{member.created}}</p>
+                    <p>{{member.created | date: "longDate"}}</p> 
+                    <!-- za ova date ima mn options na primer dd MMM yyyy ke dae ex. 24 Jun 2020 -->
                 </div>
             </div>
             <div class="card-footer">
