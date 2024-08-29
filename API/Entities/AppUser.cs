@@ -1,16 +1,18 @@
 using System;
 using API.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Entities;
 
-public class AppUser
+public class AppUser : IdentityUser<int>
 {
-    //[Key] ako se vika razlichno od Id posho Id se podrazbira 
-    public int Id { get; set; }
-    public required string UserName { get; set; } //required ni treba za da ne mu daeme da e nullable 
-    public byte[] PasswordHash { get; set; } = [];
-    public byte[] PasswordSalt { get; set; } = [];
-
+    // //[Key] ako se vika razlichno od Id posho Id se podrazbira 
+    // public int Id { get; set; }
+    // public required string UserName { get; set; } //required ni treba za da ne mu daeme da e nullable 
+    // public byte[] PasswordHash { get; set; } = [];
+    // public byte[] PasswordSalt { get; set; } = [];
+    //ne ni trebaat ovie posho sea identityuser ke ni gi providene
+    
     public DateOnly DateOfBirth { get; set; }
     public required string KnownAs { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
@@ -28,4 +30,5 @@ public class AppUser
 
     public List<Message> MessagesSent { get; set; } = [];
     public List<Message> MessagesReceived { get; set; } = [];
+    public ICollection<AppUserRole> UserRoles { get; set; } = [];
 }

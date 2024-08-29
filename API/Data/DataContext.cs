@@ -1,12 +1,15 @@
 using System;
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class DataContext(DbContextOptions options) : DbContext(options)
+public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, AppRole, int, 
+IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>(options) //what the :(((
 {
-    public DbSet<AppUser> Users { get; set; } //vaka ke se vika tabelata 
+    //public DbSet<AppUser> Users { get; set; } //vaka ke se vika tabelata  ne ni treba ova posho identitydbcontext takes care of it 
     public DbSet<UserLike> Likes { get; set; }
     public DbSet<Message> Messages { get; set; }
 
@@ -14,8 +17,13 @@ public class DataContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(modelBuilder);
 
-        //TODO: ne e ova todo samo mi treba da sveti deka se posebni sections gornovo e za likes 
+        modelBuilder.Entity<AppUser>().HasMany(ur => ur.UserRoles)
+            .WithOne(u => u.User).HasForeignKey(ur => ur.UserId).IsRequired();
 
+        modelBuilder.Entity<AppRole>().HasMany(ur => ur.UserRoles)
+            .WithOne(u => u.Role).HasForeignKey(ur => ur.RoleId).IsRequired();
+
+        //TODO: ne e ova todo samo mi treba da sveti deka se posebni sections gornovo e za likes 
         modelBuilder.Entity<UserLike>().HasKey(k => new { k.SourceUserId, k.TargetUserId });
         //so ova praime compostie key od idnjata na dvata users 
 
