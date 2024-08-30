@@ -4,6 +4,7 @@ import { User } from '../_models/user';
 import { map } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LikesService } from './likes.service';
+import { PresenceService } from './presence.service';
 
 //can be injected into components
 //created when called disposed of ??
@@ -13,6 +14,7 @@ import { LikesService } from './likes.service';
 export class AccountService {
   private http = inject(HttpClient);
   private likeService = inject(LikesService); //pazi koa inject service vo service mozhe da se desi circular dependencies i posle rip:(
+  private presenceService = inject(PresenceService);
   baseUrl = environment.apiUrl;
 
   currentUser = signal<User | null>(null);
@@ -53,9 +55,11 @@ export class AccountService {
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUser.set(user);
     this.likeService.getLikeIds(); //ova ke go updatene signalot shto go iame vo toj service
+    this.presenceService.createHubConnection(user);
   }
   logout() {
     localStorage.removeItem('user');
     this.currentUser.set(null);
+    this.presenceService.stopHubConnection();
   }
 }

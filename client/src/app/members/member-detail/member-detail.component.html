@@ -6,6 +6,11 @@
             <!-- zatoa shto praime check gore dali postoi ne mora da iame ?-->
             <!-- vo sluchaj da e nov user i da nema slika staeno stavame default za da ne e prazno i da ne baca errori  -->
             <div class="card-body">
+                @if (presenceService.onlineUsers().includes(member.username)) {
+                <div class="mb-2">
+                    <i class="fa fa-user-circle text-success"></i> Online now
+                </div>
+                }
                 <div>
                     <strong>Location:</strong>
                     <p>{{member.city}}, {{member.country}}</p>
@@ -53,8 +58,7 @@
                 }
             </tab>
             <tab heading="Messages" (selectTab)="onTabActivated($event)">
-                <app-member-messages (updateMessages)="onUpdateMessages($event)"
-                [username]="member.username" [messages]="messages"></app-member-messages>
+                <app-member-messages [username]="member.username"></app-member-messages>
             </tab>
         </tabset>
     </div>

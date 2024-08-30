@@ -3,6 +3,7 @@ using API.Data;
 using API.Helpers;
 using API.Interfaces;
 using API.Services;
+using API.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions;
@@ -33,6 +34,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ILikesRepository, LikesRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<LogUserActivity>();
 
@@ -43,6 +45,8 @@ public static class ApplicationServiceExtensions
         //posho automapper profileot ide od profiles ke znae deka tie mu se mapsot 
 
         services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+        services.AddSignalR();
+        services.AddSingleton<PresenceTracker>();
 
         return services;
     }
