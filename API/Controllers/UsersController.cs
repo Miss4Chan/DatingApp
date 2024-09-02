@@ -25,7 +25,8 @@ public class UsersController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoServi
     [HttpGet("{username}")]
     public async Task<ActionResult<MemberDto>> GetUser(string username)
     {
-        var user = await unitOfWork.UserRepository.GetMemberAsync(username);
+        var currentUsername = User.GetUsername();
+        var user = await unitOfWork.UserRepository.GetMemberAsync(username, currentUser: currentUsername == username);
         if (user == null) return NotFound(); //znae deka mora da projde ifot prvo ne e ova java lol:)
         return user;
     }
@@ -60,7 +61,7 @@ public class UsersController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoServi
         };
 
         //pred da ja staish vidi dali mu e prva, ako mu e prva po default staj ja da bide main
-        if (user.Photos.Count == 0) photo.IsMain = true;
+        //if (user.Photos.Count == 0) photo.IsMain = true; // ne go stavame ova posho sakame approval 
 
         user.Photos.Add(photo);
 
@@ -96,7 +97,9 @@ public class UsersController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoServi
     {
         var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
         if (user == null) return BadRequest("User not found");
-        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+
+        var photo = await unitOfWork.PhotoRepository.GetPhotoById(photoId);
+        
         if (photo == null || photo.IsMain) return BadRequest("This photo cannot be deleted");
 
         if (photo.PublicId != null)

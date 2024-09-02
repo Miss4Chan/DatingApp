@@ -16,7 +16,8 @@ public interface IUserRepository
     Task<IEnumerable<AppUser>> GetUsersAsync();
     Task<AppUser?> GetUserByIdAsync(int id); //make them optional since they can return null
     Task<AppUser?> GetUserByUsernameAsync(string username);
+    Task<AppUser?> GetUserByPhotoId(int photoId);
 
     Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams);
-    Task<MemberDto?> GetMemberAsync(string username);
+    Task<MemberDto?> GetMemberAsync(string username, bool currentUser); //treba da mozhe sam da si gi vidi makar i da ne se approved
 }

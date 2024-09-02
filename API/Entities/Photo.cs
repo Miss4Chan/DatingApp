@@ -16,6 +16,7 @@ public class Photo
     //Also when we delete the user the images will stay 
 
     //Ova e required one to many relationship
+    public bool IsApproved { get; set; } //photo challenge 
     public int AppUserId { get; set; }
     public AppUser AppUser { get; set; } = null!;
 }

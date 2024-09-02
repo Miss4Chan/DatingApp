@@ -13,6 +13,8 @@ IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<i
     public DbSet<UserLike> Likes { get; set; }
     public DbSet<Message> Messages { get; set; }
 
+    public DbSet<Photo> Photos { get; set; }
+
     public DbSet<Group> Groups { get; set; }
     public DbSet<Connection> Connections { get; set; }
 
@@ -41,5 +43,7 @@ IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<i
 
         modelBuilder.Entity<Message>().HasOne(x => x.Recipient).WithMany(x => x.MessagesReceived).OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Message>().HasOne(x => x.Sender).WithMany(x => x.MessagesSent).OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Photo>().HasQueryFilter(x => x.IsApproved == true);
     }
 }
