@@ -27,10 +27,14 @@ app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrig
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapControllers();
 
 app.MapHub<PresenceHub>("hubs/presence");
 app.MapHub<MessageHub>("hubs/message");
+app.MapFallbackToController("Index","Fallback");
 
 using var scope = app.Services.CreateScope(); //the idea is to create a scope that we can later dispose of 
 var services = scope.ServiceProvider;

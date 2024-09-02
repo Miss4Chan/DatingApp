@@ -37,7 +37,7 @@ IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<i
         //eden userlike ima eden source user ama mozhe da ima povekje target u sluchajov listata likedusers
 
         modelBuilder.Entity<UserLike>().HasOne(s => s.TargetUser)
-        .WithMany(l => l.LikedByUsers).HasForeignKey(s => s.TargetUserId).OnDelete(DeleteBehavior.Cascade);
+        .WithMany(l => l.LikedByUsers).HasForeignKey(s => s.TargetUserId).OnDelete(DeleteBehavior.NoAction);
 
         //TODO: lol read the previous one
 
